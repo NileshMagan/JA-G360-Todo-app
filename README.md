@@ -31,29 +31,62 @@ App runs at http://localhost:4200 and calls http://localhost:5000.
 - POST /api/todos { title: string }
 - DELETE /api/todos/{id}
 
-## HOW-TO (Project Setup Steps + Commands)
-1. Initialize repo and Angular app:
+## HOW-TO
+
+### Frontend (Angular)
+1. Install Angular CLI (optional):
    ```bash
-   git init
    npm i -g @angular/cli@latest --yes
+   ```
+2. Scaffold app (done for you):
+   ```bash
    ng new todo-app --routing --style=scss --standalone true --skip-git --directory "frontend" --strict true --ssr false
    ```
-2. Create Web API project (framework now net9.0) and add files following `dotnet new webapi --use-controllers` conventions (under `backend/src/TodoApi`).
-3. Add Swagger and CORS in `Program.cs`:
+3. Add Material and animations (already integrated):
+   - Dependencies: `@angular/material`, animations provided in `app.config.ts` via `provideAnimations()`
+   - Theme configured in `src/styles.scss`
+4. Dev server:
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
+
+### Backend (ASP.NET Core)
+1. Create solution and projects (shown here for a fresh setup):
+   ```bash
+   dotnet new sln -n TodoApp
+   dotnet new webapi -n TodoApi -f net9.0 --use-controllers
+   dotnet new xunit -n TodoApi.Tests -f net9.0
+   ```
+2. Move to structured layout (optional but recommended):
+   ```bash
+   mkdir -p backend/src backend/tests
+   mv TodoApi backend/src/TodoApi
+   mv TodoApi.Tests backend/tests/TodoApi.Tests
+   ```
+3. Add to solution and reference tests to API:
+   ```bash
+   dotnet sln TodoApp.sln add backend/src/TodoApi/TodoApi.csproj backend/tests/TodoApi.Tests/TodoApi.Tests.csproj
+   dotnet add backend/tests/TodoApi.Tests/TodoApi.Tests.csproj reference backend/src/TodoApi/TodoApi.csproj
+   ```
+4. Enable Swagger and CORS in `Program.cs` (already done):
    - `builder.Services.AddEndpointsApiExplorer();`
    - `builder.Services.AddSwaggerGen(...)`
    - `app.UseSwagger(); app.UseSwaggerUI();` (Development only)
-   - CORS policy `AllowFrontend` for `http://localhost:4200`
-4. Implement in-memory repository and controller.
-5. Add backend tests (xUnit) under `backend/tests/TodoApi.Tests`.
-6. Implement Angular `TodoService` and `TodosComponent`; provide `HttpClient` and route root to component.
-7. Restructure backend into `backend/src` and `backend/tests`.
-8. Add READMEs for root, backend, and frontend.
-9. Commit changes:
+   - CORS policy to allow `http://localhost:4200`
+5. Set dev URL via launch settings (port 5000): `backend/src/TodoApi/Properties/launchSettings.json`
+6. Restore and run:
    ```bash
-   git add -A
-   git commit -m "feat: Angular + .NET TODO app with in-memory API, tests, and README"
-   git commit -m "chore(backend): move API to backend/src and tests to backend/tests; add READMEs and update solution"
+   cd backend/src/TodoApi
+   dotnet restore
+   dotnet run
+   ```
+7. Run tests:
+   ```bash
+   cd ../../tests/TodoApi.Tests
+   dotnet restore
+   dotnet test
    ```
 
 ## Notes

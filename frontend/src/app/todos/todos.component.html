@@ -2,26 +2,22 @@
   <h2>TODOs</h2>
 
   <form (ngSubmit)="add()" class="add-form">
-    <input
-      type="text"
-      name="title"
-      [ngModel]="newTitle()"
-      (ngModelChange)="newTitle.set($event)"
-      placeholder="What needs to be done?"
-      aria-label="New todo title"
-    />
-    <button type="submit" [disabled]="!canAdd()">Add</button>
+    <mat-form-field appearance="outline" style="flex:1;">
+      <mat-label>What needs to be done?</mat-label>
+      <input matInput name="title" [ngModel]="newTitle()" (ngModelChange)="newTitle.set($event)" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!canAdd()">Add</button>
   </form>
 
   <div *ngIf="loading()">Loading...</div>
   <div *ngIf="error()" class="error">{{ error() }}</div>
 
-  <ul class="list">
-    <li *ngFor="let item of items(); trackBy: trackById">
-      <span>{{ item.title }}</span>
-      <button class="delete" (click)="remove(item.id)">Delete</button>
-    </li>
-  </ul>
+  <mat-list class="list">
+    <mat-list-item *ngFor="let item of items(); trackBy: trackById">
+      <div matListItemTitle>{{ item.title }}</div>
+      <button mat-button color="warn" class="delete" (click)="remove(item.id)">Delete</button>
+    </mat-list-item>
+  </mat-list>
 </section>
 
 
