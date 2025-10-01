@@ -5,7 +5,7 @@
     <input
       type="text"
       name="title"
-      [(ngModel)]="newTitle()"
+      [ngModel]="newTitle()"
       (ngModelChange)="newTitle.set($event)"
       placeholder="What needs to be done?"
       aria-label="New todo title"
@@ -17,7 +17,7 @@
   <div *ngIf="error()" class="error">{{ error() }}</div>
 
   <ul class="list">
-    <li *ngFor="let item of items(); trackBy: item.id">
+    <li *ngFor="let item of items(); trackBy: trackById">
       <span>{{ item.title }}</span>
       <button class="delete" (click)="remove(item.id)">Delete</button>
     </li>

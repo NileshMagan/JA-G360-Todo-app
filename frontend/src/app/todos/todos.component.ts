@@ -34,6 +34,10 @@ export class TodosComponent {
   protected remove(id: string): void {
     this.service.remove(id);
   }
+
+  protected trackById(index: number, item: { id: string }): string {
+    return item.id;
+  }
 }
 
 
