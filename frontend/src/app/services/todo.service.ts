@@ -16,10 +16,11 @@ export class TodoService {
   readonly loading = signal<boolean>(false);
   readonly error = signal<string | null>(null);
 
-  load(): void {
+  load(page: number = 1, pageSize: number = 100): void {
     this.loading.set(true);
     this.error.set(null);
-    this.http.get<TodoItem[]>(this.baseUrl).subscribe({
+    const params = { page, pageSize } as const;
+    this.http.get<TodoItem[]>(this.baseUrl, { params }).subscribe({
       next: (items) => {
         this.items.set(items);
         this.loading.set(false);

@@ -10,6 +10,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
 });
 
+// Response caching
+builder.Services.AddResponseCaching();
+
 builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
 
 const string CorsPolicyName = "AllowFrontend";
@@ -33,6 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(CorsPolicyName);
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

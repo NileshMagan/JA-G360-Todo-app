@@ -10,17 +10,19 @@ namespace TodoApi.Tests;
 public sealed class TodosControllerTests
 {
     [Fact]
-    public void Get_ShouldReturnOkWithItems()
+    public void Get_ShouldReturnOkWithItems_AndSetTotalCountHeader()
     {
-        var items = new[] { new TodoItem { Title = "X" } };
+        var items = new[] { new TodoItem { Title = "X" }, new TodoItem { Title = "Y" } };
         var repo = new Mock<ITodoRepository>();
         repo.Setup(r => r.GetAll()).Returns(items);
         var controller = new TodosController(repo.Object);
 
-        var result = controller.Get();
+        var result = controller.Get(page: 1, pageSize: 1);
 
         result.Result.Should().BeOfType<OkObjectResult>();
-        (result.Result as OkObjectResult)!.Value.Should().BeSameAs(items);
+        var ok = (OkObjectResult)result.Result!;
+        (ok.Value as object[]).Should().NotBeNull();
+        controller.Response.Headers["X-Total-Count"].ToString().Should().Be("2");
     }
 
     [Fact]

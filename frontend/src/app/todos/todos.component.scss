@@ -11,20 +11,31 @@
 }
 
 .list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: grid;
   gap: 0.5rem;
 }
 
-.list li {
-  display: flex;
+.list-row {
+  display: grid;
+  grid-template-columns: auto 2rem 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.75rem;
   padding: 0.5rem 0.75rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
+  background: #fff;
+}
+
+.drag {
+  cursor: grab;
+}
+.drag:active {
+  cursor: grabbing;
+}
+
+.index {
+  text-align: center;
+  color: #64748b;
 }
 
 .delete {

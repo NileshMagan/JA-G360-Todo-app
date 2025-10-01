@@ -5,19 +5,32 @@
     <mat-form-field appearance="outline" style="flex:1;">
       <mat-label>What needs to be done?</mat-label>
       <input matInput name="title" [ngModel]="newTitle()" (ngModelChange)="newTitle.set($event)" />
+      <button mat-icon-button matSuffix color="primary" type="submit" [disabled]="!canAdd()" aria-label="Add todo">
+        <span class="material-icons">add</span>
+      </button>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="!canAdd()">Add</button>
   </form>
 
   <div *ngIf="loading()">Loading...</div>
   <div *ngIf="error()" class="error">{{ error() }}</div>
 
-  <mat-list class="list">
-    <mat-list-item *ngFor="let item of items(); trackBy: trackById">
-      <div matListItemTitle>{{ item.title }}</div>
-      <button mat-button color="warn" class="delete" (click)="remove(item.id)">Delete</button>
-    </mat-list-item>
-  </mat-list>
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <div *ngIf="items().length === 0" class="empty">No todos added</div>
+      <div *ngIf="items().length > 0" cdkDropList (cdkDropListDropped)="drop($event)" class="list">
+        <div cdkDrag class="list-row" *ngFor="let item of items(); let i = index; trackBy: trackById">
+          <button class="drag" mat-icon-button cdkDragHandle aria-label="Reorder">
+            <span class="material-icons">drag_indicator</span>
+          </button>
+          <div class="index">{{ i + 1 }}</div>
+          <div class="title">{{ item.title }}</div>
+          <button mat-icon-button color="warn" aria-label="Delete" (click)="remove(item.id)">
+            <span class="material-icons">delete</span>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </section>
 
 

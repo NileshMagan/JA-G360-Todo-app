@@ -5,12 +5,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TodoService } from '../services/todo.service';
 
 @Component({
   selector: 'app-todos',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, NgClass, AsyncPipe, JsonPipe, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule],
+  imports: [NgIf, NgFor, FormsModule, NgClass, AsyncPipe, JsonPipe, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule, MatIconModule, MatCardModule, DragDropModule],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.scss'
 })
@@ -41,6 +44,12 @@ export class TodosComponent {
 
   protected trackById(index: number, item: { id: string }): string {
     return item.id;
+  }
+
+  protected drop(event: CdkDragDrop<unknown>): void {
+    const current = this.items();
+    moveItemInArray(current, event.previousIndex, event.currentIndex);
+    this.items.set([...current]);
   }
 }
 

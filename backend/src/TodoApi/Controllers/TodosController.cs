@@ -16,9 +16,22 @@ public sealed class TodosController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IReadOnlyCollection<TodoItem>> Get()
+    [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any, NoStore = false)]
+    public ActionResult<IReadOnlyCollection<TodoItem>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 50)
     {
-        return Ok(_repository.GetAll());
+        if (page <= 0 || pageSize <= 0 || pageSize > 500)
+        {
+            return BadRequest("Invalid paging parameters");
+        }
+
+        var all = _repository.GetAll();
+        var paged = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToArray();
+
+        Response.Headers["X-Total-Count"] = all.Count.ToString();
+        return Ok(paged);
     }
 
     public sealed record CreateTodoRequest(string Title);

@@ -19,11 +19,13 @@ describe('TodoService', () => {
     httpMock.verify();
   });
 
-  it('loads items', () => {
-    service.load();
+  it('loads items with paging', () => {
+    service.load(2, 25);
 
-    const req = httpMock.expectOne('http://localhost:5000/api/todos');
+    const req = httpMock.expectOne(r => r.url === 'http://localhost:5000/api/todos');
     expect(req.request.method).toBe('GET');
+    expect(req.request.params.get('page')).toBe('2');
+    expect(req.request.params.get('pageSize')).toBe('25');
     req.flush([{ id: '1', title: 'A', isCompleted: false }]);
 
     expect(service.items().length).toBe(1);
