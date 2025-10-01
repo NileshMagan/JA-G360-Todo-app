@@ -1,0 +1,27 @@
+<section class="todos">
+  <h2>TODOs</h2>
+
+  <form (ngSubmit)="add()" class="add-form">
+    <input
+      type="text"
+      name="title"
+      [(ngModel)]="newTitle()"
+      (ngModelChange)="newTitle.set($event)"
+      placeholder="What needs to be done?"
+      aria-label="New todo title"
+    />
+    <button type="submit" [disabled]="!canAdd()">Add</button>
+  </form>
+
+  <div *ngIf="loading()">Loading...</div>
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <ul class="list">
+    <li *ngFor="let item of items(); trackBy: item.id">
+      <span>{{ item.title }}</span>
+      <button class="delete" (click)="remove(item.id)">Delete</button>
+    </li>
+  </ul>
+</section>
+
+
