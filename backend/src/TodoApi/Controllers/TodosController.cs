@@ -1,6 +1,9 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TodoApi.Common;
+using TodoApi.Features.Todos;
+using TodoApi.Features.Todos.GetTodos;
 using TodoApi.Models;
-using TodoApi.Repositories;
 
 namespace TodoApi.Controllers;
 
@@ -8,26 +11,23 @@ namespace TodoApi.Controllers;
 [Route("api/[controller]")]
 public sealed class TodosController : ControllerBase
 {
-    private readonly ITodoRepository _repository;
+    private readonly IMediator _mediator;
 
-    public TodosController(ITodoRepository repository)
+    public TodosController(IMediator mediator)
     {
-        _repository = repository;
+        _mediator = mediator;
     }
 
     [HttpGet]
     [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any, NoStore = false)]
-    public ActionResult<IReadOnlyCollection<TodoItem>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 50)
+    public async Task<ActionResult<ApiResponse<GetTodosResponse>>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 50)
     {
-        if (page <= 0 || pageSize <= 0 || pageSize > 500)
-        {
-            return BadRequest("Invalid paging parameters");
-        }
-
-        var all = _repository.GetAll();
-        var paged = all
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+        var query = new GetTodosQuery(page, pageSize);
+        var result = await _mediator.Send(query);
+        
+        Response.Headers.Append("X-Total-Count", result.TotalCount.ToString());
+        
+        return ApiResponse<GetTodosResponse>.Ok(result);
             .ToArray();
 
         Response.Headers["X-Total-Count"] = all.Count.ToString();

@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ConfigService } from './config.service';
 
 export type TodoItem = {
   id: string;
@@ -10,7 +11,10 @@ export type TodoItem = {
 @Injectable({ providedIn: 'root' })
 export class TodoService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:5000/api/todos';
+  private readonly configService = inject(ConfigService);
+  private get baseUrl() {
+    return `${this.configService.getConfig().apiBaseUrl}/todos`;
+  }
 
   readonly items = signal<TodoItem[]>([]);
   readonly loading = signal<boolean>(false);

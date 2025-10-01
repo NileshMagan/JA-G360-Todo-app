@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TodosComponent } from './todos.component';
 import { TodoService } from '../services/todo.service';
+import { ConfigService } from '../services/config.service';
 import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -11,8 +12,15 @@ describe('TodosComponent', () => {
   let service: TodoService;
 
   beforeEach(async () => {
+    const configSpy = jasmine.createSpyObj('ConfigService', ['getConfig', 'loadConfig']);
+    configSpy.getConfig.and.returnValue({ apiBaseUrl: 'http://test-api.com/api' });
+    configSpy.loadConfig.and.returnValue(Promise.resolve());
+
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TodosComponent, MatCardModule, DragDropModule]
+      imports: [HttpClientTestingModule, TodosComponent, MatCardModule, DragDropModule],
+      providers: [
+        { provide: ConfigService, useValue: configSpy }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TodosComponent);
