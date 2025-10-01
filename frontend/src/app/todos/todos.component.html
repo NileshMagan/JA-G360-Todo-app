@@ -1,6 +1,4 @@
 <section class="todos">
-  <h2>TODOs</h2>
-
   <form (ngSubmit)="add()" class="add-form">
     <mat-form-field appearance="outline" style="flex:1;">
       <mat-label>What needs to be done?</mat-label>
@@ -16,7 +14,12 @@
 
   <mat-card appearance="outlined">
     <mat-card-content>
-      <div *ngIf="items().length === 0" class="empty">No todos added</div>
+      <mat-card *ngIf="items().length === 0" class="info-alert">
+        <mat-card-content>
+          <mat-icon>info</mat-icon>
+          <span>No todos added</span>
+        </mat-card-content>
+      </mat-card>
       <div *ngIf="items().length > 0" cdkDropList (cdkDropListDropped)="drop($event)" class="list">
         <div cdkDrag class="list-row" *ngFor="let item of items(); let i = index; trackBy: trackById">
           <button class="drag" mat-icon-button cdkDragHandle aria-label="Reorder">

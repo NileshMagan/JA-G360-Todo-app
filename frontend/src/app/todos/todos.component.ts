@@ -1,5 +1,5 @@
 import { Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
-import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,7 +13,7 @@ import { TodoService } from '../services/todo.service';
 @Component({
   selector: 'app-todos',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, NgClass, AsyncPipe, JsonPipe, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule, MatIconModule, MatCardModule, DragDropModule],
+  imports: [NgIf, NgFor, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule, MatIconModule, MatCardModule, DragDropModule],
   templateUrl: './todos.component.html',
   styleUrl: './todos.component.scss'
 })

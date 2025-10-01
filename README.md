@@ -70,11 +70,7 @@ App runs at http://localhost:4200 and calls http://localhost:5000.
    dotnet sln TodoApp.sln add backend/src/TodoApi/TodoApi.csproj backend/tests/TodoApi.Tests/TodoApi.Tests.csproj
    dotnet add backend/tests/TodoApi.Tests/TodoApi.Tests.csproj reference backend/src/TodoApi/TodoApi.csproj
    ```
-4. Enable Swagger and CORS in `Program.cs` (already done):
-   - `builder.Services.AddEndpointsApiExplorer();`
-   - `builder.Services.AddSwaggerGen(...)`
-   - `app.UseSwagger(); app.UseSwaggerUI();` (Development only)
-   - CORS policy to allow `http://localhost:4200`
+4. Enable Swagger, caching, pagination, and CORS in `Program.cs` and controllers (done).
 5. Set dev URL via launch settings (port 5000): `backend/src/TodoApi/Properties/launchSettings.json`
 6. Restore and run:
    ```bash
@@ -88,6 +84,15 @@ App runs at http://localhost:4200 and calls http://localhost:5000.
    dotnet restore
    dotnet test
    ```
+
+## SEO
+- Semantic HTML structure and heading (`h1`) present.
+- Mobile-friendly viewport meta tag.
+- Fast, client-side rendering with lean bundle; Material icons loaded via CDN.
+- Caching: API uses response caching on list endpoint, improving repeat load times.
+- Pagination prevents overfetching, improving performance metrics.
+- Descriptive page title set in `index.html`.
+- Optional SSR/Prerender could be added (Angular SSR) for further SEO; omitted for brevity.
 
 ## Notes
 - Swagger is available at `http://localhost:5000/swagger` in Development.
