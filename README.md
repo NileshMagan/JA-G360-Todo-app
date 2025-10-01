@@ -1,10 +1,10 @@
-# TODO App (Angular + .NET 8)
+# TODO App (Angular + .NET 9)
 
 Simple TODO list: view, add, delete. Angular frontend + .NET Web API backend. In-memory storage.
 
 ## Prerequisites
 - Node.js 18+ and npm
-- .NET SDK 8.0+
+- .NET SDK 9.0+
 
 ## Run Backend
 ```
@@ -38,35 +38,21 @@ App runs at http://localhost:4200 and calls http://localhost:5000.
    npm i -g @angular/cli@latest --yes
    ng new todo-app --routing --style=scss --standalone true --skip-git --directory "frontend" --strict true --ssr false
    ```
-2. Create .NET 8 Web API (local SDK not available in this env, files added manually following `dotnet new webapi --use-controllers` conventions). Project files are under `backend/src/TodoApi`.
+2. Create Web API project (framework now net9.0) and add files following `dotnet new webapi --use-controllers` conventions (under `backend/src/TodoApi`).
 3. Add Swagger and CORS in `Program.cs`:
    - `builder.Services.AddEndpointsApiExplorer();`
    - `builder.Services.AddSwaggerGen(...)`
    - `app.UseSwagger(); app.UseSwaggerUI();` (Development only)
    - CORS policy `AllowFrontend` for `http://localhost:4200`
-4. Implement in-memory repository and controller:
-   - `InMemoryTodoRepository` implementing `ITodoRepository`
-   - `TodosController` with `GET`, `POST`, `DELETE`
-5. Add backend tests (xUnit): `backend/tests/TodoApi.Tests`
-   - `InMemoryTodoRepositoryTests`
-   - `TodosControllerTests`
-6. Angular frontend wiring:
-   - `TodoService` using `HttpClient` to `http://localhost:5000/api/todos`
-   - `TodosComponent` with add/delete and list rendering
-   - Provide `HttpClient` in `app.config.ts`
-   - Route `''` to `TodosComponent`
-7. Restructure backend:
-   ```bash
-   # Move API and tests
-   # (performed via file operations; final structure below)
-   backend/src/TodoApi
-   backend/tests/TodoApi.Tests
-   ```
-8. Create READMEs for root, backend, and frontend.
+4. Implement in-memory repository and controller.
+5. Add backend tests (xUnit) under `backend/tests/TodoApi.Tests`.
+6. Implement Angular `TodoService` and `TodosComponent`; provide `HttpClient` and route root to component.
+7. Restructure backend into `backend/src` and `backend/tests`.
+8. Add READMEs for root, backend, and frontend.
 9. Commit changes:
    ```bash
    git add -A
-   git commit -m "feat: Angular + .NET 8 TODO app with in-memory API, tests, and README"
+   git commit -m "feat: Angular + .NET TODO app with in-memory API, tests, and README"
    git commit -m "chore(backend): move API to backend/src and tests to backend/tests; add READMEs and update solution"
    ```
 
