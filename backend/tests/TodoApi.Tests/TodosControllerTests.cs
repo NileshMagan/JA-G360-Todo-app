@@ -1,9 +1,11 @@
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TodoApi.Controllers;
 using TodoApi.Models;
 using TodoApi.Repositories;
+using Xunit;
 
 namespace TodoApi.Tests;
 
@@ -16,6 +18,11 @@ public sealed class TodosControllerTests
         var repo = new Mock<ITodoRepository>();
         repo.Setup(r => r.GetAll()).Returns(items);
         var controller = new TodosController(repo.Object);
+        
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
 
         var result = controller.Get(page: 1, pageSize: 1);
 
